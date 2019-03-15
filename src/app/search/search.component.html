@@ -1,0 +1,154 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-3">
+      <h2 class="ui header">Search flights</h2>
+
+      <form (ngSubmit)="onSearchQuerySubmit()">
+        <div class="form-group">
+          <label for="origin">Travelling from: </label>
+          <input type="text" id="origin" class="form-control" placeholder="Travelling from" name="origin" [(ngModel)]="searchquery.origin">
+        </div>
+        <div class="form-group">
+          <label for="destination">Going to: </label>
+          <input type="text" id="destination" class="form-control" placeholder="Going to" name="destination" [(ngModel)]="searchquery.destination">
+        </div>
+        <div class="form-group">
+          <label for="flightDate">Flight date: </label>
+          <input type="text" id="flightDate" class="form-control" placeholder="Flight date" name="flightDate" [(ngModel)]="searchquery.flightDate">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+
+    <div class="col-md-1"> </div>
+    <div class="col-md-8" *ngIf="data==0">
+      <h4 class="ui header">Booking cancelled due to error!. Inconvenience cause is regretted!!</h4>
+    </div>
+    <div class="col-md-8" [hidden]="!bookingConfirmed">
+      <h4 class="ui header">Booking Confirmed</h4>
+      <h6>
+        <span class="badge badge-secondary">Ticket details</span>
+      </h6>
+      <div class="alert alert-dark" role="alert">
+        <span class="badge badge-secondary">PNR #: {{data}}</span>
+        <table class="table table-striped table-hover">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">Flight</th>
+              <th scope="col">From</th>
+              <th scope="col">To</th>
+              <th scope="col">Date</th>
+              <th scope="col">Fare</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{bookingRecord.flightNumber}}</td>
+              <td>{{bookingRecord.origin}}</td>
+              <td>{{bookingRecord.destination}}</td>
+              <td>{{bookingRecord.flightDate}}</td>
+              <td>{{bookingRecord.fare}}</td>
+            </tr>
+          </tbody>
+        </table>
+        <h6>
+          <span class="badge badge-secondary">Passenger details</span>
+        </h6>
+        <table class="table table-striped table-hover">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">First Name</th>
+              <th scope="col">Last Name</th>
+              <th scope="col">Gender</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let p of bookingRecord.passengers">
+              <td>{{p.firstName}}</td>
+              <td>{{p.lastName}}</td>
+              <td>{{p.gender}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-md-8" [hidden]="!showFlightList">
+      <table class="table table-striped table-hover" style="cursor: pointer;">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Flight</th>
+            <th scope="col">From</th>
+            <th scope="col">To</th>
+            <th scope="col">Date</th>
+            <th scope="col">Fare</th>
+            <th scope="col">Currency</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let flight of flights" (click)="flightSelected(flight)" data-toggle="tooltip" title="Click to book!">
+            <th scope="row">{{ flight.id }}</th>
+            <td>{{ flight.flightNumber }}</td>
+            <td>{{flight.origin }}</td>
+            <td>{{flight.destination }}</td>
+            <td>{{flight.flightDate }}</td>
+            <td>{{flight.fares.fare }}</td>
+            <td>{{flight.fares.currency }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <form [formGroup]="passengerForm" (ngSubmit)="addPassenger()" [hidden]="!showPassengerForm">
+        <h6>
+          <span class="badge badge-secondary">Enter Passenger details</span>
+        </h6>
+        <span class="border">
+          <div class="form-group">
+            <label for="firstName">First name: </label>
+            <input type="text" id="firstName" class="form-control" placeholder="First name" formControlName="firstName">
+          </div>
+          <div class="form-group">
+            <label for="lastName">Last name: </label>
+            <input type="text" id="lastName" class="form-control" placeholder="Last name" formControlName="lastName">
+          </div>
+          <div class="form-group">
+            <label for="gender">Gender: </label>
+            <input type="text" id="gender" class="form-control" placeholder="Gender" formControlName="gender">
+          </div>
+          <button type="submit" class="btn btn-primary">Add Passenger</button>
+        </span>
+      </form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-3" [hidden]="!showPassengerDetails">
+      <h4 class="ui header">Selected flight</h4>
+      <div class="alert alert-dark" role="alert" *ngIf="bookingRecord.flightNumber">
+        {{bookingRecord.flightNumber}}-{{bookingRecord.flightDate}}-{{bookingRecord.origin}}-{{bookingRecord.destination}}
+      </div>
+    </div>
+    <div class="col-md-5" [hidden]="!showPassengerDetails">
+      <h6>
+        <span class="badge badge-secondary">Passenger details</span>
+      </h6>
+      <table class="ui celled table">
+        <thead>
+          <tr>
+            <th>First name</th>
+            <th>Last name</th>
+            <th>Gender</th>
+          </tr>
+        </thead>
+
+        <tr *ngFor="let p of passengers">
+          <td>{{ p.firstName }}</td>
+          <td>{{p.lastName}}</td>
+          <td>{{p.gender}}</td>
+        </tr>
+      </table>
+      <form (ngSubmit)="confirmBooking()">
+        <button type="submit" class="btn btn-primary">Confirm Booking</button>
+      </form>
+    </div>
+  </div>
+</div>

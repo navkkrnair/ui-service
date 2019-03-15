@@ -1,0 +1,76 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-4">
+      <div class="card">
+        <h5 class="card-header">Booking Search</h5>
+        <div class="card-body">
+          <form (ngSubmit)="findBookingRecord()">
+            <div class="form-group">
+              <label for="id">Booking Id: </label>
+              <input type="text" id="id" class="form-control" placeholder="Booking Id" name="bookingId" [(ngModel)]="bookingid">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8" *ngIf="showPassengers">
+      <span class="badge badge-pill badge-primary">Booking Details</span>
+      <div class="card">
+        <div class="card-body">
+          <table class="table table-striped table-hover">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">Flight</th>
+                <th scope="col">From</th>
+                <th scope="col">To</th>
+                <th scope="col">Date</th>
+                <th scope="col">Fare</th>
+                <th scope="col">status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{bookingRecord.flightNumber}}</td>
+                <td>{{bookingRecord.origin}}</td>
+                <td>{{bookingRecord.destination}}</td>
+                <td>{{bookingRecord.flightDate}}</td>
+                <td>{{bookingRecord.fare}}</td>
+                <td>{{bookingRecord.status}}</td>
+              </tr>
+            </tbody>
+          </table>
+          <h6>
+            <span class="badge badge-secondary">Passenger details</span>
+          </h6>
+          <table class="table table-striped table-hover">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">First Name</th>
+                <th scope="col">Last Name</th>
+                <th scope="col">Gender</th>
+                <th scope="col"> </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let p of passengers">
+                <td>{{p.firstName}}</td>
+                <td>{{p.lastName}}</td>
+                <td>{{p.gender}}</td>
+                <td>
+                  <a (click)="checkIn(p)" style="cursor: pointer;">CheckIn</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="showCheckIn">
+    <div class="col-md-4"></div>
+    <div class="col-md-6">
+      Checked In, Seat # is {{this.checkInRecord.seatNumber}}, Checkin Id is: {{this.checkinId}}
+    </div>
+  </div>
+</div>
